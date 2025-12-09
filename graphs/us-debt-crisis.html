@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Debt Crisis - DoomGraph</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="back-link">← Back to DoomGraph</a>
+        <h1>US Debt Crisis</h1>
+        <p class="tagline">When Interest Payments Exceed Federal Revenue: The Path to Insolvency</p>
+    </header>
+    
+    <main>
+        <section class="chart-container">
+            <canvas id="debtChart"></canvas>
+        </section>
+        
+        <section class="controls">
+            <div class="control-group">
+                <label for="interestRate">Interest Rate: <span id="rateDisplay">7.5</span>%</label>
+                <input type="range" id="interestRate" min="3" max="15" step="0.5" value="7.5">
+                <div class="rate-labels">
+                    <span>3%</span>
+                    <span>15%</span>
+                </div>
+            </div>
+            
+            <div class="legend-info">
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #3498db;"></span>
+                    <span>Federal Revenue (~17.5% of GDP)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #e74c3c;"></span>
+                    <span>Interest Payments on Debt</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #2ecc71;"></span>
+                    <span>Defense Budget</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #9b59b6;"></span>
+                    <span>Medicare</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #f39c12;"></span>
+                    <span>Social Security</span>
+                </div>
+                <div class="legend-item insolvency-legend">
+                    <span class="legend-color" style="background: rgba(231, 76, 60, 0.4);"></span>
+                    <span>Insolvency Zone (Interest > Revenue)</span>
+                </div>
+            </div>
+        </section>
+        
+        <section class="info-panel">
+            <h2>Understanding the Crisis</h2>
+            
+            <div class="interest-rate-explainer">
+                <h3>📈 Why Interest Rates Matter</h3>
+                <div class="explainer-content">
+                    <div class="current-rate">
+                        <span class="rate-label">Current Effective Rate:</span>
+                        <span class="rate-value">~7.5%</span>
+                    </div>
+                    <p>The interest rate shown in this visualization (default 7.5%) represents the <strong>blended average rate</strong> the US government pays on its debt. This isn't a single rate—it's a weighted average across all Treasury securities (bills, notes, bonds) with different maturities and coupon rates.</p>
+                    
+                    <div class="rate-spiral">
+                        <h4>⚠️ The Death Spiral Effect</h4>
+                        <p>As national debt grows relative to GDP, credit rating agencies (Moody's, S&P, Fitch) will <strong>downgrade US Treasury bonds</strong>. This has already begun:</p>
+                        <ul>
+                            <li><strong>2011:</strong> S&P downgraded US from AAA to AA+</li>
+                            <li><strong>2023:</strong> Fitch downgraded US from AAA to AA+</li>
+                            <li><strong>2023:</strong> Moody's changed outlook to "negative"</li>
+                        </ul>
+                        <p>Each downgrade forces the government to offer <strong>higher interest rates</strong> to attract buyers for new bonds. Higher rates mean:</p>
+                        <ol>
+                            <li>More money spent on interest payments</li>
+                            <li>Larger deficits → more borrowing needed</li>
+                            <li>Debt grows faster → further downgrades</li>
+                            <li>Even higher rates required → <span class="highlight-danger">REPEAT</span></li>
+                        </ol>
+                        <p class="warning-text">Use the slider above to see how even small rate increases dramatically accelerate the timeline to insolvency.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>National Debt</h3>
+                    <p class="stat-value">$35.5 Trillion</p>
+                    <p class="stat-note">FY 2024</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Federal Revenue</h3>
+                    <p class="stat-value">$5.0 Trillion</p>
+                    <p class="stat-note">~17.5% of GDP</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Annual Interest</h3>
+                    <p class="stat-value" id="currentInterest">$882 Billion</p>
+                    <p class="stat-note">At current rates</p>
+                </div>
+                <div class="stat-card">
+                    <h3>% of Revenue</h3>
+                    <p class="stat-value" id="budgetPercent">17.5%</p>
+                    <p class="stat-note">Going to interest</p>
+                </div>
+                <div class="stat-card warning">
+                    <h3>50% Revenue Year</h3>
+                    <p class="stat-value" id="dangerYear">~2030</p>
+                    <p class="stat-note">Danger threshold</p>
+                </div>
+                <div class="stat-card warning">
+                    <h3>Insolvency Year</h3>
+                    <p class="stat-value" id="crossoverYear">~2034</p>
+                    <p class="stat-note">Interest ≥ Revenue</p>
+                </div>
+            </div>
+            
+            <div class="consequences">
+                <h3>Consequences of US Debt Default</h3>
+                <div class="consequence-grid">
+                    <div class="consequence-item severe">
+                        <h4>💥 Immediate Financial Crisis</h4>
+                        <p>Global markets would crash. The US dollar's status as world reserve currency would be threatened, causing inflation to skyrocket.</p>
+                    </div>
+                    <div class="consequence-item severe">
+                        <h4>📉 Credit Rating Collapse</h4>
+                        <p>US Treasury bonds would be downgraded, making all future borrowing significantly more expensive, creating a death spiral.</p>
+                    </div>
+                    <div class="consequence-item severe">
+                        <h4>🏦 Banking System Shock</h4>
+                        <p>Banks holding Treasury securities would face massive losses, potentially triggering bank runs and failures.</p>
+                    </div>
+                    <div class="consequence-item severe">
+                        <h4>👴 Social Programs Collapse</h4>
+                        <p>Social Security, Medicare, and Medicaid payments would be delayed or reduced, affecting millions of Americans.</p>
+                    </div>
+                    <div class="consequence-item severe">
+                        <h4>🎖️ Defense Vulnerability</h4>
+                        <p>Military operations and veteran benefits would be disrupted, compromising national security.</p>
+                    </div>
+                    <div class="consequence-item severe">
+                        <h4>🌍 Global Contagion</h4>
+                        <p>Foreign holders of US debt ($7.6 trillion) would face losses, spreading crisis worldwide.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="data-sources">
+            <h3>Data Sources & Methodology</h3>
+            <ul>
+                <li><strong>GDP Data:</strong> <a href="https://fred.stlouisfed.org/series/GDP" target="_blank">Federal Reserve Economic Data (FRED)</a> - Bureau of Economic Analysis (BEA)</li>
+                <li><strong>Debt & Interest:</strong> <a href="https://fiscaldata.treasury.gov/" target="_blank">US Treasury Department Fiscal Data</a></li>
+                <li><strong>Budget Projections:</strong> <a href="https://www.cbo.gov/data/budget-economic-data" target="_blank">Congressional Budget Office (CBO)</a></li>
+                <li><strong>GDP Growth Forecast:</strong> <a href="https://www.imf.org/en/Publications/WEO" target="_blank">IMF World Economic Outlook</a> - 2.5% baseline growth</li>
+                <li><strong>Global Outlook:</strong> <a href="https://www.worldbank.org/en/publication/global-economic-prospects" target="_blank">World Bank Global Economic Prospects</a></li>
+                <li><strong>Federal Revenue:</strong> Historical average ~17.5% of GDP (CBO data)</li>
+            </ul>
+            <div class="methodology-note">
+                <h4>Key Assumptions</h4>
+                <ul>
+                    <li>GDP Growth: 2.5% annually (IMF baseline, actual may vary with economic conditions)</li>
+                    <li>Debt Growth: 8% base + additional growth tied to interest rate increases</li>
+                    <li>Federal Revenue: Modeled as 17.5% of GDP (historical average)</li>
+                    <li>Interest calculated on total debt at the slider-selected rate</li>
+                    <li>Insolvency defined as: Interest Payments ≥ Total Federal Revenue</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Data sourced from CBO, Treasury Department, and Federal Reserve</p>
+        <p class="disclaimer">Educational purposes only. Not financial advice.</p>
+    </footer>
+    
+    <script src="../js/us-debt-chart.js"></script>
+</body>
+</html>
