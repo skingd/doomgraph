@@ -4,29 +4,35 @@
 // Historical data (in billions USD)
 // Sources: 
 // - GDP: Bureau of Economic Analysis (BEA), FRED (Federal Reserve Economic Data)
-// - Debt & Interest: US Treasury Department Fiscal Data
+// - Debt & Interest: US Treasury Department Fiscal Data (fiscaldata.treasury.gov)
 // - Budget: Congressional Budget Office (CBO)
 // - Projections: IMF World Economic Outlook, CBO Long-term Budget Outlook
 const historicalData = {
-    years: [1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015, 2020, 2024],
-    gdp: [2857, 4339, 5963, 7640, 10250, 13039, 14992, 18238, 21060, 28780], // BEA/FRED
-    totalDebt: [908, 1823, 3233, 4974, 5674, 7933, 13562, 18151, 27748, 35500],
-    federalSpending: [591, 946, 1253, 1516, 1789, 2472, 3457, 3688, 6552, 6700],
-    interestPayments: [53, 129, 184, 232, 223, 184, 196, 223, 345, 882],
+    years: [1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015, 2020, 2025],
+    gdp: [2857, 4339, 5963, 7640, 10250, 13039, 14992, 18238, 21060, 30120], // BEA/FRED
+    totalDebt: [908, 1823, 3233, 4974, 5674, 7933, 13562, 18151, 27748, 38390], // Treasury
+    federalSpending: [591, 946, 1253, 1516, 1789, 2472, 3457, 3688, 6552, 7010], // Treasury MTS
+    interestPayments: [53, 129, 184, 232, 223, 184, 196, 223, 345, 1100], // ~13% of spending in FY2025
     defenseBudget: [134, 253, 299, 272, 294, 495, 691, 596, 714, 886],
     medicare: [32, 65, 98, 160, 197, 299, 452, 546, 776, 874],
     socialSecurity: [118, 186, 248, 335, 409, 523, 706, 882, 1096, 1461]
 };
 
 // Current assumptions from the data
+// Sources: US Treasury Fiscal Data (December 2025)
+// - National Debt: $38.39 trillion (fiscaldata.treasury.gov)
+// - FY 2025 Spending: $7.01 trillion
+// - Net Interest: ~$1.1 trillion (13% of spending)
+// - Average Interest Rate on existing debt: 3.36%
+// - However, NEW debt is issued at current market rates (~5-7.5%)
 const baseAssumptions = {
-    currentDebt: 35500, // billions
-    currentGDP: 28780, // billions (Q2 2024, BEA)
-    baseInterestRate: 5, // %
+    currentDebt: 38390, // billions (Dec 2025, Treasury)
+    currentGDP: 30120, // billions (FY 2025, BEA)
+    baseInterestRate: 5, // % - blended rate for projections
     annualSpendingGrowth: 0.10, // 10%
     annualDebtGrowth: 0.08, // 8% base growth
     annualGDPGrowth: 0.025, // 2.5% (IMF baseline projection)
-    currentYear: 2024
+    currentYear: 2025
 };
 
 let chart;
@@ -43,7 +49,7 @@ function calculateProjections(interestRate) {
     const projectedFederalRevenue = [];
     
     let currentDebt = baseAssumptions.currentDebt;
-    let currentSpending = 6700; // 2024 spending in billions
+    let currentSpending = 7010; // FY 2025 spending in billions (Treasury)
     let currentDefense = 886;
     let currentMedicare = 874;
     let currentSocialSecurity = 1461;
@@ -52,7 +58,7 @@ function calculateProjections(interestRate) {
     // Interest growth rate increases with higher rates
     const interestGrowthMultiplier = 1 + (interestRate - 5) * 0.05;
     
-    for (let year = 2024; year <= 2040; year++) {
+    for (let year = 2025; year <= 2040; year++) {
         projectedYears.push(year);
         
         // Calculate interest payment based on rate
@@ -94,8 +100,8 @@ function calculateProjections(interestRate) {
 function getFullDataset(interestRate) {
     const projections = calculateProjections(interestRate);
     
-    // Combine historical (up to 2023) with projections (2024+)
-    const historicalYearsFiltered = historicalData.years.filter(y => y < 2024);
+    // Combine historical (up to 2024) with projections (2025+)
+    const historicalYearsFiltered = historicalData.years.filter(y => y < 2025);
     const historicalSpendingFiltered = historicalData.federalSpending.slice(0, historicalYearsFiltered.length);
     const historicalInterestFiltered = historicalData.interestPayments.slice(0, historicalYearsFiltered.length);
     const historicalDefenseFiltered = historicalData.defenseBudget.slice(0, historicalYearsFiltered.length);
@@ -149,13 +155,15 @@ function createInsolvencyData(data) {
 
 // Update stats display
 function updateStats(interestRate, data) {
-    const immediateInterest = (35500 * (interestRate / 100));
-    const currentRevenue = 28780 * 0.175; // Federal revenue as % of GDP
-    const budgetPercent = ((immediateInterest / currentRevenue) * 100).toFixed(1);
+    // Current actual interest is $1.1T based on existing blended rate (~3.36%)
+    // The slider shows projected rates for NEW debt issuance
+    const actualCurrentInterest = 1100; // $1.1 trillion (FY2025 Treasury data)
+    const currentSpending = 7010; // $7.01 trillion (FY2025 Treasury data)
+    const budgetPercent = ((actualCurrentInterest / currentSpending) * 100).toFixed(1);
     const crossoverYear = findCrossoverYear(data);
     const dangerYear = findDangerYear(data);
     
-    document.getElementById('currentInterest').textContent = `$${immediateInterest.toFixed(0)} Billion`;
+    document.getElementById('currentInterest').textContent = `$${(actualCurrentInterest / 1000).toFixed(1)} Trillion`;
     document.getElementById('budgetPercent').textContent = `${budgetPercent}%`;
     document.getElementById('crossoverYear').textContent = typeof crossoverYear === 'number' ? `~${crossoverYear}` : crossoverYear;
     

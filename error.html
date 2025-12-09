@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - DoomGraph</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .error-container {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-code {
+            font-size: 8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0;
+            line-height: 1;
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            color: #e8e8e8;
+            margin: 1rem 0;
+        }
+        
+        .error-message {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            max-width: 500px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .error-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .error-btn-primary {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        .error-btn-secondary {
+            background: transparent;
+            border: 2px solid #3498db;
+            color: #3498db;
+        }
+        
+        .error-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .error-details {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            max-width: 600px;
+        }
+        
+        .error-details h3 {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .error-details ul {
+            list-style: none;
+            text-align: left;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+        
+        .error-details li {
+            padding: 0.3rem 0;
+        }
+        
+        .error-details li::before {
+            content: "• ";
+            color: #e74c3c;
+        }
+        
+        .glitch-text {
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 90%, 100% {
+                opacity: 1;
+            }
+            92%, 94%, 96%, 98% {
+                opacity: 0.8;
+                transform: translateX(-2px);
+            }
+            91%, 93%, 95%, 97%, 99% {
+                opacity: 0.8;
+                transform: translateX(2px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DoomGraph</h1>
+        <p class="tagline">Something Went Wrong</p>
+    </header>
+    
+    <main class="error-container">
+        <div class="error-icon">💥</div>
+        <p class="error-code glitch-text">404</p>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">
+            The page you're looking for has either been moved, deleted, or never existed. 
+            Much like fiscal responsibility in modern government budgeting.
+        </p>
+        
+        <div class="error-actions">
+            <a href="index.html" class="error-btn error-btn-primary">← Back to Home</a>
+            <a href="graphs/us-debt-crisis.html" class="error-btn error-btn-secondary">View Debt Crisis</a>
+        </div>
+        
+        <div class="error-details">
+            <h3>Possible Reasons</h3>
+            <ul>
+                <li>The URL may have been typed incorrectly</li>
+                <li>The page may have been moved or renamed</li>
+                <li>The link you followed may be outdated</li>
+                <li>The visualization may still be under development</li>
+            </ul>
+        </div>
+    </main>
+    
+    <footer>
+        <p>DoomGraph - Visualizing Economic Reality</p>
+        <p class="disclaimer">If you believe this is an error, please check the URL and try again.</p>
+    </footer>
+</body>
+</html>
